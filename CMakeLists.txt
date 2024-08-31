@@ -4,7 +4,7 @@ if(WIN32)
 else()
     set(USERHOME $ENV{HOME})
 endif()
-set(sdkVersion 1.5.1)
+set(sdkVersion 2.0.0)
 set(toolchainVersion 13_2_Rel1)
 set(picotoolVersion 2.0.0)
 include(${USERHOME}/.pico-sdk/cmake/pico-vscode.cmake)
@@ -22,7 +22,7 @@ pico_sdk_init()
 FetchContent_Declare(no-OS-FatFS-SD-SDIO-SPI-RPi-Pico
         GIT_REPOSITORY https://github.com/carlk3/no-OS-FatFS-SD-SDIO-SPI-RPi-Pico.git
         SOURCE_SUBDIR src
-        GIT_TAG v2.6.0
+        GIT_TAG 4b9fab54931c31d6422005792c430d59c43edfb3 # v3.1.0
         )
 FetchContent_MakeAvailable(no-OS-FatFS-SD-SDIO-SPI-RPi-Pico)
 
