@@ -19,12 +19,12 @@ project(picostation)
 
 pico_sdk_init()
 
-FetchContent_Declare(FatFs_SPI
+FetchContent_Declare(no-OS-FatFS-SD-SDIO-SPI-RPi-Pico
         GIT_REPOSITORY https://github.com/carlk3/no-OS-FatFS-SD-SDIO-SPI-RPi-Pico.git
         SOURCE_SUBDIR src
-        GIT_TAG v1.2.4
+        GIT_TAG v2.6.0
         )
-FetchContent_MakeAvailable(FatFs_SPI)
+FetchContent_MakeAvailable(no-OS-FatFS-SD-SDIO-SPI-RPi-Pico)
 
 add_executable(picostation)
 
@@ -34,7 +34,7 @@ pico_enable_stdio_usb(picostation 1)
 
 pico_generate_pio_header(picostation ${CMAKE_CURRENT_LIST_DIR}/main.pio)
 
-target_link_libraries(picostation PRIVATE pico_stdlib hardware_pio hardware_dma FatFs_SPI pico_multicore)
+target_link_libraries(picostation PRIVATE pico_stdlib hardware_pio hardware_dma no-OS-FatFS-SD-SDIO-SPI-RPi-Pico pico_multicore)
 
 pico_set_binary_type(picostation copy_to_ram)
 

@@ -62,7 +62,6 @@ static sd_card_t sd_cards[] = {  // One for each SD card
         .card_detect_gpio = -1,   // Card detect
         .card_detected_true = -1,  // What the GPIO read returns when a card is
                                   // present. Use -1 if there is no card detect.
-        .m_Status = STA_NOINIT
     }
 };
 

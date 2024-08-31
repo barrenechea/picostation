@@ -92,8 +92,11 @@ void i2s_data_thread() {
         }
     }
 
+    // This must be called before sd_get_drive_prefix:
+    sd_init_driver();
+
     pSD = sd_get_by_num(0);
-    fr = f_mount(&pSD->fatfs, pSD->pcName, 1);
+    fr = f_mount(&pSD->state.fatfs, sd_get_drive_prefix(pSD), 1);
     if (FR_OK != fr) panic("f_mount error: %s (%d)\n", FRESULT_str(fr), fr);
     fr = f_open(&fil, "UNIROM.cue", FA_READ);
     if (FR_OK != fr && FR_EXIST != fr)
