@@ -49,11 +49,15 @@ static spi_t spis[] = {  // One for each SPI.
 };
 
 // Hardware Configuration of the SD Card "objects"
+static sd_spi_if_t spi_if = {
+    .spi = &spis[0],  // Pointer to the SPI driving this card
+    .ss_gpio = 9,     // The SPI slave select GPIO for this SD card
+};
+
 static sd_card_t sd_cards[] = {  // One for each SD card
     {
-        .pcName = "0:",           // Name used to mount device
-        .spi = &spis[0],          // Pointer to the SPI driving this card
-        .ss_gpio = 9,            // The SPI slave select GPIO for this SD card
+        .type = SD_IF_SPI,
+        .spi_if_p = &spi_if,  // Pointer to the SPI interface driving this card
         .use_card_detect = false,
         .card_detect_gpio = -1,   // Card detect
         .card_detected_true = -1,  // What the GPIO read returns when a card is

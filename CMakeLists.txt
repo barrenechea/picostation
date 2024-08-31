@@ -20,9 +20,9 @@ project(picostation)
 pico_sdk_init()
 
 FetchContent_Declare(FatFs_SPI
-        GIT_REPOSITORY https://github.com/carlk3/no-OS-FatFS-SD-SPI-RPi-Pico.git
-        SOURCE_SUBDIR FatFs_SPI
-        GIT_TAG bbccc5d2deea09e128e2576ef35f72b473c5ba5f
+        GIT_REPOSITORY https://github.com/carlk3/no-OS-FatFS-SD-SDIO-SPI-RPi-Pico.git
+        SOURCE_SUBDIR src
+        GIT_TAG v1.2.4
         )
 FetchContent_MakeAvailable(FatFs_SPI)
 
