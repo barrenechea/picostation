@@ -27,24 +27,23 @@ jobs:
           path: pico-sdk
           submodules: true
 
-      - name: Install dependencies
-        run: |
-          sudo apt update -qq
-          sudo apt install -qy cmake gcc-arm-none-eabi libnewlib-arm-none-eabi build-essential
+      - name: Setup latest cmake
+        uses: jwlawson/actions-setup-cmake@v2
 
-      - name: Create build environment
-        working-directory: ${{github.workspace}}/picostation
-        run: cmake -E make_directory ${{ github.workspace }}/picostation/build
+      - name: Install latest Arm GNU Toolchain (arm-none-eabi-gcc)
+        uses: carlosperate/arm-none-eabi-gcc-action@v1
+        with:
+          path-env-var: PICO_TOOLCHAIN_PATH
 
       - name: Configure CMake
-        working-directory: ${{github.workspace}}/picostation/build
+        working-directory: ${{github.workspace}}/picostation
         env:
           PICO_SDK_PATH: ${{ github.workspace }}/pico-sdk
-        run: cmake .. -DPICO_BOARD=${{ matrix.board }} -DCMAKE_BUILD_TYPE=$BUILD_TYPE
+        run: cmake -B build . -DPICO_BOARD=${{ matrix.board }} -DCMAKE_BUILD_TYPE=$BUILD_TYPE
 
       - name: Build
         working-directory: ${{github.workspace}}/picostation/build
-        run: cmake --build . --config $BUILD_TYPE --parallel $(nproc)
+        run: cmake --build . --parallel $(nproc)
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
