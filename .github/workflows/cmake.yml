@@ -1,0 +1,53 @@
+name: CMake
+
+on: [push, pull_request]
+
+env:
+  BUILD_TYPE: Release
+  PICO_SDK_VERSION: 2.0.0
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    strategy:
+      matrix:
+        board: [pico, pico2]
+
+    steps:
+      - name: Checkout picostation
+        uses: actions/checkout@v4
+        with:
+          path: picostation
+
+      - name: Checkout pico-sdk v${{ env.PICO_SDK_VERSION }}
+        uses: actions/checkout@v4
+        with:
+          repository: raspberrypi/pico-sdk
+          ref: ${{ env.PICO_SDK_VERSION }}
+          path: pico-sdk
+          submodules: true
+
+      - name: Install dependencies
+        run: |
+          sudo apt update -qq
+          sudo apt install -qy cmake gcc-arm-none-eabi libnewlib-arm-none-eabi build-essential
+
+      - name: Create build environment
+        working-directory: ${{github.workspace}}/picostation
+        run: cmake -E make_directory ${{ github.workspace }}/picostation/build
+
+      - name: Configure CMake
+        working-directory: ${{github.workspace}}/picostation/build
+        env:
+          PICO_SDK_PATH: ${{ github.workspace }}/pico-sdk
+        run: cmake .. -DPICO_BOARD=${{ matrix.board }} -DCMAKE_BUILD_TYPE=$BUILD_TYPE
+
+      - name: Build
+        working-directory: ${{github.workspace}}/picostation/build
+        run: cmake --build . --config $BUILD_TYPE --parallel $(nproc)
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: picostation-${{ matrix.board }}
+          path: picostation/build/picostation.*
